@@ -5,12 +5,12 @@ class WeatherForecastItem extends StatelessWidget {
   final IconData icon;
   final String temp;
 
-  const WeatherForecastItem(this.time, this.icon, this.temp, {Key? key})
+  const WeatherForecastItem({required this.time, required this.icon, required this.temp, Key? key})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return  SizedBox(
+    return SizedBox(
       width: 100,
       child: Card(
         elevation: 6,
@@ -21,9 +21,6 @@ class WeatherForecastItem extends StatelessWidget {
           padding: EdgeInsets.all(8.0),
           child: Column(
             children: [
-            SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            ),
               Text(
                 time,
                 style: TextStyle(
@@ -47,4 +44,6 @@ class WeatherForecastItem extends StatelessWidget {
     );
   }
 }
+
+
 
