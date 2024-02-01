@@ -10,11 +10,10 @@ class WeatherScreen extends StatefulWidget {
   const WeatherScreen({Key? key}) : super(key: key);
 
   @override
-  _WeatherScreenState createState() => _WeatherScreenState();
+   State<WeatherScreen> createState()=> _WeatherScreenState();
 }
-
 class _WeatherScreenState extends State<WeatherScreen> {
-  Future<void> getCurrentWeather() async {
+  Future<Map<String,dynamic>> getCurrentWeather() async {
     try {
       String cityName = "London";
       final res = await http.get(
@@ -27,13 +26,11 @@ class _WeatherScreenState extends State<WeatherScreen> {
       if (data['cod'] != '200') {
         throw 'Unexpected error occurred';
       }
-
-      data['main']['temp'];
+      return data;
     } catch (e) {
       throw e.toString();
     }
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,6 +60,13 @@ class _WeatherScreenState extends State<WeatherScreen> {
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else {
+            final data =snapshot.data!;
+            final currentData=data['list'][0];
+            final currentWeatherTemp=currentData['main']['temp'];
+            final currentSky=currentData['weather'][0]['main'];
+            final currentPressure=currentData['main']['pressure'];
+            final windSpeed=currentData['wind']['speed'];
+            final currentHumidity=currentData['main']['humidity'];
             return Padding(
               padding: const EdgeInsets.all(16.0),
               child: SingleChildScrollView(
@@ -81,17 +85,20 @@ class _WeatherScreenState extends State<WeatherScreen> {
                           child: Column(
                             children: [
                               Text(
-                                '400 K',
+                                "$currentWeatherTemp k",
                                 style: TextStyle(
                                   fontSize: 32,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
                               SizedBox(height: 20),
-                              Icon(Icons.cloud, size: 84),
+                              Icon(currentSky=='Clouds'||currentSky=='Rain'
+                                  ?Icons.cloud
+                                  :Icons.sunny,
+                                  size: 84),
                               SizedBox(height: 10),
                               Text(
-                                'Rain',
+                                '$currentSky',
                                 style: TextStyle(
                                   fontSize: 20,
                                 ),
@@ -102,7 +109,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                       ),
                     ),
                     const SizedBox(height: 10),
-                    const Column(
+                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(height: 10),
@@ -115,20 +122,27 @@ class _WeatherScreenState extends State<WeatherScreen> {
                         ),
                         SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
-                          child: Row(
+                          child:Row(
                             children: [
-                              WeatherForecastItem('12:00 PM', Icons.cloud, '25°C'),
-                              WeatherForecastItem('03:00 PM', Icons.cloud, '28°C'),
-                              WeatherForecastItem('06:00 PM', Icons.cloud, '40°C'),
-                              WeatherForecastItem('05:00 PM', Icons.cloud, '35°C'),
-                              WeatherForecastItem('07:00 PM', Icons.cloud, '39°C'),
+
+                              for (int i = 0; i < 39; i++)
+                                WeatherForecastItem(
+                                   data['list'][i + 1]['dt'].toString()
+                                  , data['list'][i + 1]['weather'][0]['main'] ==
+                                      'Clouds' ||
+                                      data['list'][i + 1]['weather'][0]['main'] ==
+                                          'Rain'
+                                      ? Icons.cloud
+                                      : Icons.sunny,
+                                 data['list'][i + 1]['main']['temp'].toString(),
+                                )
                             ],
                           ),
                         ),
                       ],
                     ),
                     const SizedBox(height: 10),
-                    const Column(
+                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(height: 10),
@@ -143,9 +157,9 @@ class _WeatherScreenState extends State<WeatherScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            AddInfoItem(type: 'Humidity', icon: Icons.water_drop, value: '3012'),
-                            AddInfoItem(type: 'Wind', icon: Icons.wind_power, value: '4029'),
-                            AddInfoItem(type: 'Pressure', icon: Icons.umbrella, value: '4430'),
+                            AddInfoItem(label: 'Humidity', icon: Icons.water_drop, value:currentHumidity.toString()),
+                            AddInfoItem(label: 'Wind', icon: Icons.wind_power, value:windSpeed.toString()),
+                            AddInfoItem(label: 'Pressure', icon: Icons.umbrella, value:currentPressure.toString()),
                           ],
                         ),
                       ],
