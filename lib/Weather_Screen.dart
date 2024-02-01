@@ -91,12 +91,12 @@ class _WeatherScreenState extends State<WeatherScreen> {
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              SizedBox(height: 20),
+                             const  SizedBox(height: 20),
                               Icon(currentSky=='Clouds'||currentSky=='Rain'
                                   ?Icons.cloud
                                   :Icons.sunny,
                                   size: 84),
-                              SizedBox(height: 10),
+                           const SizedBox(height: 10),
                               Text(
                                 '$currentSky',
                                 style: TextStyle(
@@ -112,8 +112,8 @@ class _WeatherScreenState extends State<WeatherScreen> {
                      Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: 10),
-                        Text(
+                       const  SizedBox(height: 10),
+                        const Text(
                           'Weather Forecast',
                           style: TextStyle(
                             fontSize: 24,
@@ -145,15 +145,15 @@ class _WeatherScreenState extends State<WeatherScreen> {
                      Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: 10),
-                        Text(
+                       const  SizedBox(height: 10),
+                       const  Text(
                           'Additional Information',
                           style: TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        SizedBox(height: 10),
+                       const  SizedBox(height: 10),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
